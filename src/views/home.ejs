@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <h1>Bảng dữ liệu</h1>
+    <table class="table">
+      <thead>
+        <tr>
+          <th scope="col">ID</th>
+          <th scope="col">Email</th>
+          <th scope="col">Password</th>
+          <th scope="col">First Name</th>
+          <th scope="col">Last Name</th>
+          <th scope="col">Address</th>
+          <th scope="col">Phone Number</th>
+          <!-- <th scope="col">Gender</th>
+          <th scope="col">Image</th>
+          <th scope="col">RoleId</th>-->
+          <th scope="col">Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% data.forEach(function(d) { %>
+        <tr>
+          <th scope="row"><%=d.id %></th>
+          <td><%=d.email %></td>
+          <td><%=d.password %></td>
+          <td><%=d.firstname %></td>
+          <td><%=d.lastname %></td>
+          <td><%=d.address %></td>
+          <td><%=d.numberphone %></td>
+          <!-- <td><%=(d.gender==1)?'Nam':'Nữ' %></td> -->
+          <!-- <td><%=d.imge %></td> -->
+          <!-- <td><%=d.roleId %></td> -->
+          <td>
+            <div class="form-group">
+              <a href="/?id=<%=d.id%>" class="btn btn-warning" onclick=""
+                >Edit</a
+              >
+              <a
+                href="/delete-crud?<%=d.Id%>"
+                href=""
+                class="btn btn-danger"
+                onclick=""
+                >Delete</a
+              >
+            </div>
+          </td>
+        </tr>
+        <% }); %>
+      </tbody>
+    </table>
+  </body>
+</html>
