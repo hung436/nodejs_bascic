@@ -3,6 +3,8 @@ import homeController from "./../controllers/homeController";
 import apiController from "./../controllers/apiController";
 import cateController from "./../controllers/cateController";
 import productController from "./../controllers/productController";
+import userController from "./../controllers/userController";
+import { isAuth } from "./../middleware/AuthMiddleware";
 var multer = require("multer");
 const path = require("path");
 var storage = multer.diskStorage({
@@ -25,7 +27,7 @@ const initWebRoute = (app) => {
     res.render("about");
   });
   // ////        here is api //////
-  ///USER
+  ///Admin
   router.post("/api/loginadmin", apiController.loginadmin);
   router.get("/api/getuser", apiController.getuser);
   router.post("/api/createuser", apiController.createuser);
@@ -50,6 +52,12 @@ const initWebRoute = (app) => {
     productController.editProduct
   );
   router.delete("/api/deleteproduct", productController.deleteProduct);
+
+  ////User
+  router.post("/api/registeruser", userController.register);
+  router.post("/api/loginuser", userController.login);
+  router.get("/api/getaddress", isAuth, userController.getAddress);
+  router.post("/api/order", isAuth, userController.order);
   return app.use("/", router);
 };
 module.exports = initWebRoute;

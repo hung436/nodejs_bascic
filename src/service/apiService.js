@@ -1,5 +1,14 @@
 import db from "./../models/index";
 import bcrypt from "bcrypt";
+var passport = require("passport");
+var passportJWT = require("passport-jwt");
+var ExtractJwt = passportJWT.ExtractJwt;
+var JwtStrategy = passportJWT.Strategy;
+var jwtOptions = {};
+var jwt = require("jsonwebtoken");
+
+jwtOptions.jwtFromRequest = ExtractJwt.fromAuthHeaderAsBearerToken();
+jwtOptions.secretOrKey = "wowwow";
 const saltRounds = 10;
 const salt = bcrypt.genSaltSync(saltRounds);
 let hashUserPassword = (password) => {
@@ -99,19 +108,28 @@ let createNewUser = (data) => {
         });
       } else {
         let hash_password = await hashUserPassword(data.password);
-        await db.user.create({
-          username: data.username,
-          password: hash_password,
-          firstname: data.firstname,
-          lastname: data.lastname,
-          email: data.email,
-          address: data.address,
-          numberphone: data.numberphone,
-          // gender: data.gender === "1" ? true : false,
-          // image: data.image,
-          // roleId: data.roleId,
-          // positionId: data.positionId,
-        });
+        await db.user.create(
+          {
+            username: data.username,
+            password: hash_password,
+            firstname: data.firstname,
+            lastname: data.lastname,
+            email: data.email,
+
+            numberphone: data.numberphone,
+            address: {
+              city: "hung",
+              district: "huynhf",
+            },
+            // gender: data.gender === "1" ? true : false,
+            // image: data.image,
+            // roleId: data.roleId,
+            // positionId: data.positionId,
+          },
+          {
+            include: [db.address],
+          }
+        );
         resolve({
           errCode: 0,
           message: "OK",

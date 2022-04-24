@@ -23,8 +23,17 @@ module.exports = {
       email: {
         type: Sequelize.STRING,
       },
-      address: {
-        type: Sequelize.NUMBER,
+      city: {
+        type: Sequelize.STRING,
+      },
+      ward: {
+        type: Sequelize.STRING,
+      },
+      district: {
+        type: Sequelize.STRING,
+      },
+      street_name: {
+        type: Sequelize.STRING,
       },
       numberphone: {
         type: Sequelize.STRING,

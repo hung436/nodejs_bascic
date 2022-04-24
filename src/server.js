@@ -3,13 +3,14 @@ import configViewEngine from "./config/viewEngine";
 import initWebRoute from "./route/web";
 import connectDB from "./config/connectDB.JS";
 import bodyParser from "body-parser";
-var multer = require("multer");
-var upload = multer({ dest: "upload/" });
+
+import cors from "cors";
 const app = express();
 require("dotenv").config();
+app.use(cors());
 app.use(function (req, res, next) {
   // Website you wish to allow to connect
-  res.setHeader("Access-Control-Allow-Origin", process.env.URL_REACT);
+  res.setHeader("Access-Control-Allow-Origin", "*");
 
   // Request methods you wish to allow
   res.setHeader(
@@ -18,9 +19,9 @@ app.use(function (req, res, next) {
   );
 
   // Request headers you wish to allow
-  res.setHeader(
+  res.header(
     "Access-Control-Allow-Headers",
-    "X-Requested-With,content-type"
+    "Origin, X-Requested-With, Content-Type, Accept"
   );
 
   // Set to true if you need the website to include cookies in the requests sent
