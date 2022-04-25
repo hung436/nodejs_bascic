@@ -112,30 +112,31 @@ let order = (data) => {
   return new Promise(async (resolve, reject) => {
     try {
       if (data.jwtDecoded) {
-        await db.cartdetail.create({
-          quality: "1122",
-        });
-        await db.cart.create(
-          {
+        await db.cart
+          .create({
             userId: data.jwtDecoded,
             payment_method: data.body.payment_method,
             price: data.body.total,
             status: data.body.status,
             address_id: data.body.address_id,
-            cartdetail: [{ quality: 11 }, { quality: 12 }],
-
-            // data.body.products.forEach((item) => {
-            //   return {
-            //     productID: item.id,
-            //     quality: item.quality,
-            //     price: item.price,
-            //   };
-            // }),
-          },
-          {
-            include: [db.cartdetail],
-          }
-        );
+          })
+          .then((cart) => {
+            let array = [];
+            data.body.products.map((item) => {
+              console.log(item);
+              let instan = {
+                cartID: cart.id,
+                quality: item.quantity,
+                price: item.price,
+                producID: item.id,
+              };
+              array.push(instan);
+            }),
+              db.cartdetail.bulkCreate(array);
+          });
+        resolve({ errorCode: 0, message: "Success" });
+      } else {
+        resolve({ errorCode: 1, message: "not found" });
       }
     } catch (error) {
       reject(error);
