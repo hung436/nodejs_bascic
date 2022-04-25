@@ -15,8 +15,22 @@ let getAddress = async (req, res) => {
   return res.status(200).json(data);
 };
 let order = async (req, res) => {
-  console.log(req.body);
   let data = await userService.order(req);
   return res.status(200).json(data);
 };
-module.exports = { register, login, getAddress, order };
+let getOrder = async (req, res) => {
+  let data = await userService.getOrder(req.jwtDecoded);
+  return res.status(200).json(data);
+};
+let getOrderDetail = async (req, res) => {
+  let data = await userService.getOrderDetail(req.query.id);
+  return res.status(200).json(data);
+};
+module.exports = {
+  register,
+  login,
+  getAddress,
+  order,
+  getOrder,
+  getOrderDetail,
+};

@@ -58,6 +58,8 @@ const initWebRoute = (app) => {
   router.post("/api/loginuser", userController.login);
   router.get("/api/getaddress", isAuth, userController.getAddress);
   router.post("/api/order", isAuth, userController.order);
+  router.get("/api/getorder", isAuth, userController.getOrder);
+  router.get("/api/getorderdetail", isAuth, userController.getOrderDetail);
   return app.use("/", router);
 };
 module.exports = initWebRoute;

@@ -143,8 +143,62 @@ let order = (data) => {
     }
   });
 };
+let getOrder = (id) => {
+  return new Promise(async (resolve, reject) => {
+    try {
+      let data = await db.cart.findAll({
+        where: { userId: id },
+        include: [{ model: db.address }],
+        raw: true,
+        nest: true,
+      });
+      if (data) {
+        resolve({
+          errorCode: 0,
+          message: "Success",
+          data: data,
+        });
+      } else {
+        resolve({
+          errorCode: 1,
+          message: "not found",
+        });
+      }
+    } catch (error) {
+      reject(error);
+    }
+  });
+};
+let getOrderDetail = (id) => {
+  return new Promise(async (resolve, reject) => {
+    try {
+      if (id) {
+        let data = await db.cartdetail.findAll({
+          where: { cartID: id },
+          include: [{ model: db.product }],
+          raw: true,
+          nest: true,
+        });
+        resolve({
+          errorCode: 0,
+          message: "Success",
+          data: data,
+        });
+      } else {
+        resolve({
+          errorCode: 1,
+          message: "not found",
+        });
+      }
+    } catch (error) {
+      reject(error);
+    }
+  });
+};
 module.exports = {
   login,
   getAddress,
   order,
+  getOrder,
+  getOrderDetail,
 };
