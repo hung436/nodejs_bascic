@@ -26,6 +26,15 @@ let getOrderDetail = async (req, res) => {
   let data = await userService.getOrderDetail(req.query.id);
   return res.status(200).json(data);
 };
+let refresh = async (req, res) => {
+  console.log("refresh", req.body.refreshToken);
+  let data = await userService.refresh(req);
+  if (data.errorCode === 0) {
+    return res.status(200).json(data.data);
+  } else {
+    return res.status(403).json(data.message);
+  }
+};
 module.exports = {
   register,
   login,
@@ -33,4 +42,5 @@ module.exports = {
   order,
   getOrder,
   getOrderDetail,
+  refresh,
 };

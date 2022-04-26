@@ -37,9 +37,7 @@ const accessTokenSecret =
 // Thời gian sống của refreshToken
 const refreshTokenLife = process.env.REFRESH_TOKEN_LIFE || "3650d";
 // Mã secretKey này phải được bảo mật tuyệt đối, các bạn có thể lưu vào biến môi trường hoặc file
-const refreshTokenSecret =
-  process.env.REFRESH_TOKEN_SECRET ||
-  "refresh-token-secret-example-trungquandev.com-green-cat-a@";
+const refreshTokenSecret = process.env.REFRESH_TOKEN_SECRET || "hungdt";
 
 let login = (username, password) => {
   return new Promise(async (resolve, reject) => {
@@ -64,6 +62,13 @@ let login = (username, password) => {
               accessTokenSecret,
               accessTokenLife
             );
+            const refreshToken = await jwtHelper.generateToken(
+              userFakeData,
+              refreshTokenSecret,
+              refreshTokenLife
+            );
+            tokenList[refreshToken] = { accessToken, refreshToken };
+            userData.refreshToken = refreshToken;
             userData.accessToken = accessToken;
             userData.error = 0;
             userData.message = "Đăng nhập thành công";
@@ -143,6 +148,52 @@ let order = (data) => {
     }
   });
 };
+let refresh = async (req) => {
+  return new Promise(async (resolve, reject) => {
+    const refreshTokenFromClient = req.body.refreshToken;
+    // debug("tokenList: ", tokenList);
+
+    // Nếu như tồn tại refreshToken truyền lên và nó cũng nằm trong tokenList của chúng ta
+    if (refreshTokenFromClient && tokenList[refreshTokenFromClient]) {
+      try {
+        // Verify kiểm tra tính hợp lệ của cái refreshToken và lấy dữ liệu giải mã decoded
+        const decoded = await jwtHelper.verifyToken(
+          refreshTokenFromClient,
+          refreshTokenSecret
+        );
+        // Thông tin user lúc này các bạn có thể lấy thông qua biến decoded.data
+        // có thể mở comment dòng debug bên dưới để xem là rõ nhé.
+        // debug("decoded: ", decoded);
+        const userFakeData = decoded.data;
+
+        const accessToken = await jwtHelper.generateToken(
+          userFakeData,
+          accessTokenSecret,
+          accessTokenLife
+        );
+
+        // gửi token mới về cho người dùng
+        resolve({
+          errorCode: 0,
+          message: "Success",
+          data: accessToken,
+        });
+      } catch (error) {
+        reject(error);
+        resolve({
+          errorCode: 1,
+          message: "Invalid refresh token.",
+        });
+      }
+    } else {
+      resolve({
+        errorCode: 1,
+        message: "No token provided.",
+      });
+    }
+  });
+};
+
 let getOrder = (id) => {
   return new Promise(async (resolve, reject) => {
     try {
@@ -201,4 +252,5 @@ module.exports = {
   order,
   getOrder,
   getOrderDetail,
+  refresh,
 };

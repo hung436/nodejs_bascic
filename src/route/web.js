@@ -56,10 +56,12 @@ const initWebRoute = (app) => {
   ////User
   router.post("/api/registeruser", userController.register);
   router.post("/api/loginuser", userController.login);
+  router.post("/api/refresh", userController.refresh);
   router.get("/api/getaddress", isAuth, userController.getAddress);
   router.post("/api/order", isAuth, userController.order);
   router.get("/api/getorder", isAuth, userController.getOrder);
   router.get("/api/getorderdetail", isAuth, userController.getOrderDetail);
+
   return app.use("/", router);
 };
 module.exports = initWebRoute;
