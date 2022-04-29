@@ -30,10 +30,9 @@ let checkUserName = (username) => {
 };
 let tokenList = {};
 // Thời gian sống của token
-const accessTokenLife = process.env.ACCESS_TOKEN_LIFE || "1h";
+const accessTokenLife = process.env.ACCESS_TOKEN_LIFE || "10m";
 const accessTokenSecret =
-  process.env.ACCESS_TOKEN_SECRET ||
-  "access-token-secret-example-trungquandev.com-green-cat-a@";
+  process.env.ACCESS_TOKEN_SECRET || "access-token-secret-example";
 // Thời gian sống của refreshToken
 const refreshTokenLife = process.env.REFRESH_TOKEN_LIFE || "3650d";
 // Mã secretKey này phải được bảo mật tuyệt đối, các bạn có thể lưu vào biến môi trường hoặc file
@@ -246,6 +245,62 @@ let getOrderDetail = (id) => {
     }
   });
 };
+let addFavorite = (id, productId) => {
+  return new Promise(async (resolve, reject) => {
+    try {
+      await db.favorite.create({
+        userId: id,
+        productId: productId,
+      });
+      resolve({
+        errorCode: 0,
+        message: "Success",
+      });
+    } catch (error) {
+      reject(error);
+    }
+  });
+};
+let getFavoriteProduct = (id, productId) => {
+  return new Promise(async (resolve, reject) => {
+    try {
+      let check = await db.favorite.findOne({
+        where: { userId: id, productId: productId },
+      });
+      if (check) {
+        resolve({
+          errorCode: 0,
+          message: "Yes",
+        });
+      } else {
+        resolve({ errorCode: 1, message: "Fail" });
+      }
+    } catch (error) {
+      reject(error);
+    }
+  });
+};
+let deteleFavoriteProduct = (id, productId) => {
+  return new Promise(async (resolve, reject) => {
+    try {
+      let product = await db.favorite.findOne({
+        where: { userId: id, productId: productId },
+        raw: false,
+      });
+      if (product) {
+        await product.destroy();
+        resolve({
+          errorCode: 0,
+          message: "Success",
+        });
+      } else {
+        resolve({ errorCode: 1, message: "not found" });
+      }
+    } catch (error) {
+      reject(error);
+    }
+  });
+};
 module.exports = {
   login,
   getAddress,
@@ -253,4 +308,7 @@ module.exports = {
   getOrder,
   getOrderDetail,
   refresh,
+  addFavorite,
+  getFavoriteProduct,
+  deteleFavoriteProduct,
 };

@@ -35,6 +35,21 @@ let refresh = async (req, res) => {
     return res.status(403).json(data.message);
   }
 };
+let addFavorite = async (req, res) => {
+  let data = await userService.addFavorite(req.jwtDecoded, req.body.id);
+  return res.status(200).json(data);
+};
+let getFavoriteProduct = async (req, res) => {
+  let data = await userService.getFavoriteProduct(req.jwtDecoded, req.query.id);
+  return res.status(200).json(data);
+};
+let deteleFavoriteProduct = async (req, res) => {
+  let data = await userService.deteleFavoriteProduct(
+    req.jwtDecoded,
+    req.body.id
+  );
+  return res.status(200).json(data);
+};
 module.exports = {
   register,
   login,
@@ -43,4 +58,7 @@ module.exports = {
   getOrder,
   getOrderDetail,
   refresh,
+  addFavorite,
+  getFavoriteProduct,
+  deteleFavoriteProduct,
 };

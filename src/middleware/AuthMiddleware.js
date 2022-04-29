@@ -1,7 +1,6 @@
 const jwtHelper = require("../helpers/jwt.helper");
 const accessTokenSecret =
-  process.env.ACCESS_TOKEN_SECRET ||
-  "access-token-secret-example-trungquandev.com-green-cat-a@";
+  process.env.ACCESS_TOKEN_SECRET || "access-token-secret-example";
 let isAuth = async (req, res, next) => {
   // Lấy token được gửi lên từ phía client, thông thường tốt nhất là các bạn nên truyền token vào header
   const tokenFromClient = req.headers.authorization;
@@ -32,7 +31,16 @@ let isAuth = async (req, res, next) => {
     });
   }
 };
-
+let isAdmin = async (req, res, next) => {
+  isAuth(req, res, () => {
+    if (req.uer.id == req.parmas.id || req.user.admin) {
+      next();
+    } else {
+      res.status(403).json("no admin");
+    }
+  });
+};
 module.exports = {
   isAuth: isAuth,
+  isAdmin: isAdmin,
 };

@@ -40,6 +40,7 @@ const initWebRoute = (app) => {
   router.delete("/api/deletecategory", cateController.deleteCategory);
   ////Product
   router.get("/api/getproduct", productController.getProduct);
+  router.get("/api/getproductfill", productController.getProductFill);
   router.get("/api/getproductbyid", productController.getProductById);
   router.post(
     "/api/createproduct",
@@ -61,7 +62,18 @@ const initWebRoute = (app) => {
   router.post("/api/order", isAuth, userController.order);
   router.get("/api/getorder", isAuth, userController.getOrder);
   router.get("/api/getorderdetail", isAuth, userController.getOrderDetail);
-
+  ////favorite
+  router.post("/api/addfavorite", isAuth, userController.addFavorite);
+  router.get(
+    "/api/getfavoriteproduct",
+    isAuth,
+    userController.getFavoriteProduct
+  );
+  router.delete(
+    "/api/detelefavoriteproduct",
+    isAuth,
+    userController.deteleFavoriteProduct
+  );
   return app.use("/", router);
 };
 module.exports = initWebRoute;

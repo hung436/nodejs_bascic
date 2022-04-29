@@ -1,4 +1,5 @@
 import db from "./../models/index";
+const { Op } = require("sequelize");
 const fs = require("fs");
 const path = require("path");
 let getProduct = (page) => {
@@ -138,10 +139,87 @@ let deleteProduct = (id) => {
     }
   });
 };
+let getProductFill = (id, action) => {
+  return new Promise(async (resolve, reject) => {
+    try {
+      if (id == "ALL") {
+        if (action == "ALL") {
+          let product = await db.product.findAll();
+          resolve(product);
+        }
+        if (action == "min") {
+          let product = await db.product.findAll({
+            order: [["price", "ASC"]],
+          });
+          resolve(product);
+        }
+        if (action == "max") {
+          let product = await db.product.findAll({
+            order: [["price", "DESC"]],
+          });
+          resolve(product);
+        }
+        if (action == "free") {
+          let product = await db.product.findAll({
+            where: {
+              discount: {
+                [Op.gt]: 0,
+              },
+            },
+            order: [["discount", "DESC"]],
+          });
+          resolve(product);
+        }
+      } else {
+        if (action == "ALL") {
+          let product = await db.product.findAll({
+            where: {
+              cate_id: id,
+            },
+          });
+          resolve(product);
+        }
+        if (action == "min") {
+          let product = await db.product.findAll({
+            where: {
+              cate_id: id,
+            },
+            order: [["price", "ASC"]],
+          });
+          resolve(product);
+        }
+        if (action == "max") {
+          let product = await db.product.findAll({
+            where: {
+              cate_id: id,
+            },
+            order: [["price", "DESC"]],
+          });
+          resolve(product);
+        }
+        if (action == "free") {
+          let product = await db.product.findAll({
+            where: {
+              cate_id: id,
+              discount: {
+                [Op.gt]: 0,
+              },
+            },
+            order: [["discount", "DESC"]],
+          });
+          resolve(product);
+        }
+      }
+    } catch (error) {
+      reject(error);
+    }
+  });
+};
 module.exports = {
   getProduct,
   createProduct,
   editProduct,
   deleteProduct,
   getProductById,
+  getProductFill,
 };

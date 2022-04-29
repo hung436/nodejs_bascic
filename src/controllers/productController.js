@@ -6,7 +6,6 @@ let getProduct = async (req, res) => {
 };
 let getProductById = async (req, res) => {
   let id = req.query.id;
-  console.log(id);
   let data = await productService.getProductById(id);
   return res.status(200).json(data);
 };
@@ -22,10 +21,18 @@ let deleteProduct = async (req, res) => {
   let data = await productService.deleteProduct(req.body.id);
   return res.status(200).json(data);
 };
+let getProductFill = async (req, res) => {
+  let data = await productService.getProductFill(
+    req.query.id,
+    req.query.action
+  );
+  return res.status(200).json(data);
+};
 module.exports = {
   getProduct,
   createProduct,
   editProduct,
   deleteProduct,
   getProductById,
+  getProductFill,
 };
