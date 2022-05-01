@@ -98,7 +98,7 @@ let editProduct = (data) => {
         if (data.file) {
           if (!product.image_link === null) {
             let oldProduct = "src/public/uploads/" + product.image_link;
-            console.log(oldProduct);
+
             await fs.unlinkSync(oldProduct);
           }
           product.image_link = data.file.filename;

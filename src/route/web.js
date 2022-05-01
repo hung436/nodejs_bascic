@@ -4,6 +4,7 @@ import apiController from "./../controllers/apiController";
 import cateController from "./../controllers/cateController";
 import productController from "./../controllers/productController";
 import userController from "./../controllers/userController";
+import orderController from "./../controllers/orderController";
 import { isAuth } from "./../middleware/AuthMiddleware";
 var multer = require("multer");
 const path = require("path");
@@ -12,7 +13,6 @@ var storage = multer.diskStorage({
     callback(null, "src/public/uploads/");
   },
   filename: function (req, file, callback) {
-    console.log(file);
     callback(
       null,
       file.fieldname + "-" + Date.now() + path.extname(file.originalname)
@@ -74,6 +74,11 @@ const initWebRoute = (app) => {
     isAuth,
     userController.deteleFavoriteProduct
   );
+
+  ////order
+  router.get("/api/getallorder", orderController.getAllOrder);
+  router.get("/api/changeorder", orderController.changeOrder);
+
   return app.use("/", router);
 };
 module.exports = initWebRoute;

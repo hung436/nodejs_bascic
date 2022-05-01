@@ -31,7 +31,7 @@ app.use(function (req, res, next) {
   // Pass to next layer of middleware
   next();
 });
-const port = process.env.PORT;
+const port = process.env.PORT || 8080;
 connectDB();
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));

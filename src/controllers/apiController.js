@@ -21,7 +21,6 @@ let getuser = async (req, res) => {
 let loginadmin = async (req, res) => {
   let username = req.body.username;
   let password = req.body.password;
-  console.log(req.body);
   let userData = await apiService.login(username, password);
   return res.status(200).json({
     errorCode: userData.error,
@@ -37,7 +36,6 @@ let createuser = async (req, res) => {
   return res.status(200).json(mes);
 };
 let updateUser = async (req, res) => {
-  console.log(req.body);
   let resutl = await apiService.update_User(req.body);
   return res.status(200).json(resutl);
 };

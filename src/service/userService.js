@@ -96,7 +96,6 @@ let login = (username, password) => {
 let getAddress = (id) => {
   return new Promise(async (resolve, reject) => {
     try {
-      console.log(id);
       let address = await db.user.findOne({
         where: { id: id },
         attributes: {
@@ -127,7 +126,6 @@ let order = (data) => {
           .then((cart) => {
             let array = [];
             data.body.products.map((item) => {
-              console.log(item);
               let instan = {
                 cartID: cart.id,
                 quality: item.quantity,
@@ -153,7 +151,7 @@ let refresh = async (req) => {
     // debug("tokenList: ", tokenList);
 
     // Nếu như tồn tại refreshToken truyền lên và nó cũng nằm trong tokenList của chúng ta
-    if (refreshTokenFromClient && tokenList[refreshTokenFromClient]) {
+    if (refreshTokenFromClient) {
       try {
         // Verify kiểm tra tính hợp lệ của cái refreshToken và lấy dữ liệu giải mã decoded
         const decoded = await jwtHelper.verifyToken(

@@ -6,7 +6,7 @@ let register = async (req, res) => {
 let login = async (req, res) => {
   let username = req.body.username;
   let password = req.body.password;
-  console.log(req.body);
+
   let data = await userService.login(username, password);
   return res.status(200).json(data);
 };
@@ -27,7 +27,6 @@ let getOrderDetail = async (req, res) => {
   return res.status(200).json(data);
 };
 let refresh = async (req, res) => {
-  console.log("refresh", req.body.refreshToken);
   let data = await userService.refresh(req);
   if (data.errorCode === 0) {
     return res.status(200).json(data.data);
