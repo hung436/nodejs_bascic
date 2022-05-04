@@ -19,23 +19,7 @@
     "timezone": "+07:00"
 
   },
-  "development2": {
-    "username": "root",
-    "password": "",
-    "database": "webbanhang",
-    "host": "127.0.0.1",
-    "dialect": "mysql",
-    "logging":false,
-    "query":{"raw":true},
-    "dialectOptions": {
-     
-      "dateStrings": true,
-      "typeCast": true,
-      "timezone": "+07:00"
-    },
-    "timezone": "+07:00"
-
-  },
+ 
   "test": {
     "username": "root",
     "password": null,
