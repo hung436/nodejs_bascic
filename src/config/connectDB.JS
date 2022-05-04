@@ -11,10 +11,21 @@ const { Sequelize } = require("sequelize");
 // });
 
 // Option 3: Passing parameters separately (other dialects)
-const sequelize = new Sequelize("webbanhang", "root", "", {
-  host: "localhost",
-  dialect: "mysql",
-});
+const sequelize = new Sequelize(
+  "d5jea0cnjbam8k",
+  "nekfcwpebsrppx",
+  "315ddfc62417e867d3ec25fe0058d553ec17e41f51957edfede92554c93372f7",
+  {
+    host: "ec2-54-165-90-230.compute-1.amazonaws.com",
+    dialect: "postgres",
+    dialectOptions: {
+      ssl: {
+        require: true,
+        rejectUnauthorized: false,
+      },
+    },
+  }
+);
 let connectDB = async () => {
   try {
     await sequelize.authenticate();

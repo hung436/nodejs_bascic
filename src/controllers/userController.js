@@ -19,7 +19,7 @@ let order = async (req, res) => {
   return res.status(200).json(data);
 };
 let getOrder = async (req, res) => {
-  let data = await userService.getOrder(req.jwtDecoded);
+  let data = await userService.getOrder(req.jwtDecoded, req.query.page);
   return res.status(200).json(data);
 };
 let getOrderDetail = async (req, res) => {
@@ -49,6 +49,10 @@ let deteleFavoriteProduct = async (req, res) => {
   );
   return res.status(200).json(data);
 };
+let changeAddress = async (req, res) => {
+  let data = await userService.changeAddress(req.jwtDecoded, req.body.data);
+  return res.status(200).json(data);
+};
 module.exports = {
   register,
   login,
@@ -60,4 +64,5 @@ module.exports = {
   addFavorite,
   getFavoriteProduct,
   deteleFavoriteProduct,
+  changeAddress,
 };

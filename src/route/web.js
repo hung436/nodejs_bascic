@@ -59,6 +59,7 @@ const initWebRoute = (app) => {
   router.post("/api/loginuser", userController.login);
   router.post("/api/refresh", userController.refresh);
   router.get("/api/getaddress", isAuth, userController.getAddress);
+  router.put("/api/changeaddress", isAuth, userController.changeAddress);
   router.post("/api/order", isAuth, userController.order);
   router.get("/api/getorder", isAuth, userController.getOrder);
   router.get("/api/getorderdetail", isAuth, userController.getOrderDetail);
@@ -77,7 +78,7 @@ const initWebRoute = (app) => {
 
   ////order
   router.get("/api/getallorder", orderController.getAllOrder);
-  router.get("/api/changeorder", orderController.changeOrder);
+  router.put("/api/changeorder", orderController.changeOrder);
 
   return app.use("/", router);
 };

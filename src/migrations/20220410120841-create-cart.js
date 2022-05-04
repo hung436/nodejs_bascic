@@ -1,29 +1,26 @@
 "use strict";
 module.exports = {
   async up(queryInterface, Sequelize) {
-    await queryInterface.createTable("carts", {
+    await queryInterface.createTable("orders", {
       id: {
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,
         type: Sequelize.INTEGER,
       },
-      productId: {
-        type: Sequelize.INTEGER,
-      },
       userId: {
         type: Sequelize.INTEGER,
       },
-      productName: {
+      payment_method: {
         type: Sequelize.STRING,
       },
       price: {
         type: Sequelize.INTEGER,
       },
-      quality: {
+      status: {
         type: Sequelize.INTEGER,
       },
-      image_link: {
+      address: {
         type: Sequelize.STRING,
       },
       createdAt: {

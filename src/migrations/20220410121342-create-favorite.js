@@ -14,19 +14,7 @@ module.exports = {
       productId: {
         type: Sequelize.INTEGER,
       },
-      productName: {
-        type: Sequelize.STRING,
-      },
-      price: {
-        type: Sequelize.INTEGER,
-      },
-      image_link: {
-        type: Sequelize.STRING,
-      },
-      createdAt: {
-        allowNull: false,
-        type: Sequelize.DATE,
-      },
+
       updatedAt: {
         allowNull: false,
         type: Sequelize.DATE,

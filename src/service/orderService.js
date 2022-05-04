@@ -3,7 +3,7 @@ const getAllOrder = (page) => {
   return new Promise(async (resolve, reject) => {
     try {
       let offset = page * 5;
-      let data = await db.cart.findAndCountAll({
+      let data = await db.order.findAndCountAll({
         // include: [{ model: db.category }],
         raw: true,
         nest: true,
@@ -21,5 +21,27 @@ const getAllOrder = (page) => {
     }
   });
 };
-
-module.exports = { getAllOrder };
+const changeOrder = (id, status) => {
+  return new Promise(async (resolve, reject) => {
+    try {
+      let order = await db.order.findOne({ where: { id: id }, raw: false });
+      if (order) {
+        order.status = status;
+        await order.save();
+        resolve({
+          errorCode: 0,
+          message:
+            status === 2
+              ? "Xác nhận đơn hàng thành công"
+              : "Xác nhận đã giao hàng",
+        });
+      } else {
+        errorCode = 1;
+        message = "not found";
+      }
+    } catch (error) {
+      reject(error);
+    }
+  });
+};
+module.exports = { getAllOrder, changeOrder };

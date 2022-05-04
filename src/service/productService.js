@@ -6,7 +6,7 @@ let getProduct = (page) => {
   return new Promise(async (resolve, reject) => {
     try {
       let offset = page * 5;
-      let product2 = await db.product.findAndCountAll({
+      let product = await db.product.findAndCountAll({
         include: [{ model: db.category }],
         raw: true,
         nest: true,
@@ -14,11 +14,11 @@ let getProduct = (page) => {
         limit: 5,
         offset: offset,
       });
-      if (product2) {
+      if (product) {
         resolve({
           errorCode: 0,
           message: "Success",
-          data: product2,
+          data: product,
         });
       } else {
         resolve({
@@ -95,11 +95,12 @@ let editProduct = (data) => {
         product.descrition = data.body.description;
         product.discount = data.body.discount;
         product.highlight = data.body.highlight;
+
         if (data.file) {
-          if (!product.image_link === null) {
+          if (product.image_link !== null) {
             let oldProduct = "src/public/uploads/" + product.image_link;
 
-            await fs.unlinkSync(oldProduct);
+            fs.unlinkSync(oldProduct);
           }
           product.image_link = data.file.filename;
         }
@@ -122,7 +123,7 @@ let deleteProduct = (id) => {
     try {
       let product = await db.product.findOne({ where: { id: id }, raw: false });
       if (product) {
-        if (!product.image_link === null) {
+        if (product.image_link !== null) {
           let imgProduct = "src/public/uploads/" + product.image_link;
           await fs.unlinkSync(imgProduct);
         }

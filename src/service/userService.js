@@ -115,28 +115,41 @@ let order = (data) => {
   return new Promise(async (resolve, reject) => {
     try {
       if (data.jwtDecoded) {
-        await db.cart
+        let idorder = null;
+        let address = await db.address.findOne({
+          where: { id: data.body.address_id },
+        });
+
+        await db.order
           .create({
             userId: data.jwtDecoded,
             payment_method: data.body.payment_method,
             price: data.body.total,
             status: data.body.status,
-            address_id: data.body.address_id,
+            address:
+              address.city +
+              " " +
+              address.district +
+              " " +
+              address.ward +
+              " " +
+              address.street_name,
           })
-          .then((cart) => {
+          .then((order) => {
+            idorder = order.id;
             let array = [];
             data.body.products.map((item) => {
               let instan = {
-                cartID: cart.id,
+                orderID: order.id,
                 quality: item.quantity,
                 price: item.price,
                 producID: item.id,
               };
               array.push(instan);
             }),
-              db.cartdetail.bulkCreate(array);
+              db.orderdetail.bulkCreate(array);
           });
-        resolve({ errorCode: 0, message: "Success" });
+        resolve({ errorCode: 0, message: "Success", id: idorder });
       } else {
         resolve({ errorCode: 1, message: "not found" });
       }
@@ -191,14 +204,17 @@ let refresh = async (req) => {
   });
 };
 
-let getOrder = (id) => {
+let getOrder = (id, page) => {
   return new Promise(async (resolve, reject) => {
     try {
-      let data = await db.cart.findAll({
+      let offset = page * 5;
+      let data = await db.order.findAndCountAll({
         where: { userId: id },
-        include: [{ model: db.address }],
+        // include: [{ model: db.address }],
         raw: true,
         nest: true,
+        limit: 5,
+        offset: offset,
       });
       if (data) {
         resolve({
@@ -221,8 +237,8 @@ let getOrderDetail = (id) => {
   return new Promise(async (resolve, reject) => {
     try {
       if (id) {
-        let data = await db.cartdetail.findAll({
-          where: { cartID: id },
+        let data = await db.orderdetail.findAll({
+          where: { orderID: id },
           include: [{ model: db.product }],
           raw: true,
           nest: true,
@@ -299,6 +315,29 @@ let deteleFavoriteProduct = (id, productId) => {
     }
   });
 };
+let changeAddress = (id, address) => {
+  return new Promise(async (resolve, reject) => {
+    try {
+      let userAddress = await db.address.findOne({
+        where: { userID: id },
+        raw: false,
+      });
+      if (userAddress) {
+        userAddress.city = address.city;
+        userAddress.district = address.district;
+        userAddress.ward = address.ward;
+        userAddress.street_name = address.street_name;
+        userAddress.save();
+        resolve({
+          errorCode: 0,
+          message: "Success",
+        });
+      }
+    } catch (error) {
+      reject(error);
+    }
+  });
+};
 module.exports = {
   login,
   getAddress,
@@ -309,4 +348,5 @@ module.exports = {
   addFavorite,
   getFavoriteProduct,
   deteleFavoriteProduct,
+  changeAddress,
 };
