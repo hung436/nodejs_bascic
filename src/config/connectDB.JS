@@ -1,4 +1,5 @@
 const { Sequelize } = require("sequelize");
+require("dotenv").config();
 
 // // Option 1: Passing a connection URI
 // const sequelize = new Sequelize('sqlite::memory:') // Example for sqlite
@@ -12,12 +13,12 @@ const { Sequelize } = require("sequelize");
 
 // Option 3: Passing parameters separately (other dialects)
 const sequelize = new Sequelize(
-  "d5jea0cnjbam8k",
-  "nekfcwpebsrppx",
-  "315ddfc62417e867d3ec25fe0058d553ec17e41f51957edfede92554c93372f7",
+  process.env.DB_DATABASE,
+  process.env.DB_USERNAME,
+  process.env.DB_PASSWORD,
   {
-    host: "ec2-54-165-90-230.compute-1.amazonaws.com",
-    dialect: "postgres",
+    host: process.env.DB_HOST,
+    dialect: process.env.DB_CONNECTION,
     dialectOptions: {
       ssl: {
         require: true,

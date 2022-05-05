@@ -1,8 +1,8 @@
 import homeService from "./../service/homeService";
 let getHomePage = async (req, res) => {
-  let data = await homeService.getUsers();
+  // let data = await homeService.getUsers();
 
-  return res.render("home", { data: data });
+  return res.send("Hello world");
 };
 
 module.exports = {
