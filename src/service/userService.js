@@ -238,6 +238,7 @@ let getOrderDetail = (id) => {
     try {
       if (id) {
         let data = await db.orderdetail.findAll({
+          order: [["id", "ASC"]],
           where: { orderID: id },
           include: [{ model: db.product }],
           raw: true,

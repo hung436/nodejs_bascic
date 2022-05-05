@@ -2,7 +2,7 @@ import db from "./../models/index";
 let get_Category = () => {
   return new Promise(async (resolve, reject) => {
     try {
-      let data = await db.category.findAll();
+      let data = await db.category.findAll({ order: [["id", "ASC"]] });
       if (data) {
         resolve({
           errorCode: 0,

@@ -145,7 +145,7 @@ let getProductFill = (id, action) => {
     try {
       if (id == "ALL") {
         if (action == "ALL") {
-          let product = await db.product.findAll();
+          let product = await db.product.findAll({ order: [["id", "DESC"]] });
           resolve(product);
         }
         if (action == "min") {

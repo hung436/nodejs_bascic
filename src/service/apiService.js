@@ -78,6 +78,7 @@ let getAllUsers = (userId) => {
       let users = "";
       if (userId === "ALL") {
         users = db.user.findAll({
+          order: [["id", "DESC"]],
           // attributes: {
           //   exclude: ["password"],
           // },

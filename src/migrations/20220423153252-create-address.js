@@ -10,11 +10,6 @@ module.exports = {
       },
       userID: {
         type: Sequelize.INTEGER,
-        allowNull: false,
-        references: {
-          model: "users",
-          key: "id",
-        },
       },
       city: {
         type: Sequelize.STRING,

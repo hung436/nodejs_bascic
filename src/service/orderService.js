@@ -4,6 +4,7 @@ const getAllOrder = (page) => {
     try {
       let offset = page * 5;
       let data = await db.order.findAndCountAll({
+        order: [["id", "ASC"]],
         // include: [{ model: db.category }],
         raw: true,
         nest: true,
