@@ -14,6 +14,7 @@ let createProduct = async (req, res) => {
   return res.status(200).json(data);
 };
 let editProduct = async (req, res) => {
+  console.log("file", req.file);
   let data = await productService.editProduct(req);
   return res.status(200).json(data);
 };

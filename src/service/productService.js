@@ -99,9 +99,9 @@ let editProduct = (data) => {
         if (data.file) {
           if (product.image_link !== null) {
             let oldProduct = "src/public/uploads/" + product.image_link;
-
             fs.unlinkSync(oldProduct);
           }
+          // product.image_link = `https://drive.google.com/uc?export=view&id=${data.file.fileId}`;
           product.image_link = data.file.filename;
         }
 

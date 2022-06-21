@@ -6,6 +6,7 @@ import productController from "./../controllers/productController";
 import userController from "./../controllers/userController";
 import orderController from "./../controllers/orderController";
 import { isAuth } from "./../middleware/AuthMiddleware";
+
 var multer = require("multer");
 const path = require("path");
 var storage = multer.diskStorage({
