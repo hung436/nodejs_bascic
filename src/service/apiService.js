@@ -1,14 +1,14 @@
-import db from "./../models/index";
-import bcrypt from "bcrypt";
-var passport = require("passport");
-var passportJWT = require("passport-jwt");
+import db from './../models/index';
+import bcrypt from 'bcrypt';
+var passport = require('passport');
+var passportJWT = require('passport-jwt');
 var ExtractJwt = passportJWT.ExtractJwt;
 var JwtStrategy = passportJWT.Strategy;
 var jwtOptions = {};
-var jwt = require("jsonwebtoken");
+var jwt = require('jsonwebtoken');
 
 jwtOptions.jwtFromRequest = ExtractJwt.fromAuthHeaderAsBearerToken();
-jwtOptions.secretOrKey = "wowwow";
+jwtOptions.secretOrKey = 'wowwow';
 const saltRounds = 10;
 const salt = bcrypt.genSaltSync(saltRounds);
 let hashUserPassword = (password) => {
@@ -50,16 +50,16 @@ let login = (username, password) => {
           let check = await bcrypt.compareSync(password, user.password);
           if (check) {
             userData.error = 0;
-            userData.message = "Đăng nhập thành công";
+            userData.message = 'Đăng nhập thành công';
             delete user.password;
             userData.user = user;
           } else {
             userData.error = 3;
-            userData.message = "Wrong password";
+            userData.message = 'Wrong password';
           }
         } else {
           userData.error = 2;
-          userData.message = "User not found";
+          userData.message = 'User not found';
         }
       } else {
         userData.error = 1;
@@ -75,16 +75,16 @@ let login = (username, password) => {
 let getAllUsers = (userId) => {
   return new Promise(async (resolve, reject) => {
     try {
-      let users = "";
-      if (userId === "ALL") {
+      let users = '';
+      if (userId === 'ALL') {
         users = db.user.findAll({
-          order: [["id", "DESC"]],
+          order: [['id', 'DESC']],
           // attributes: {
           //   exclude: ["password"],
           // },
         });
       }
-      if (userId && userId !== "ALL") {
+      if (userId && userId !== 'ALL') {
         users = await db.user.findOne({
           where: { id: userId },
           // attributes: {
@@ -105,7 +105,7 @@ let createNewUser = (data) => {
       if (check) {
         resolve({
           errCode: 1,
-          message: "username đã tồn tại",
+          message: 'username đã tồn tại',
         });
       } else {
         let hash_password = await hashUserPassword(data.password);
@@ -119,13 +119,9 @@ let createNewUser = (data) => {
 
             numberphone: data.numberphone,
             address: {
-              city: "hung",
-              district: "huynhf",
+              city: '',
+              district: '',
             },
-            // gender: data.gender === "1" ? true : false,
-            // image: data.image,
-            // roleId: data.roleId,
-            // positionId: data.positionId,
           },
           {
             include: [db.address],
@@ -133,7 +129,7 @@ let createNewUser = (data) => {
         );
         resolve({
           errCode: 0,
-          message: "OK",
+          message: 'OK',
         });
       }
     } catch (error) {
@@ -145,13 +141,13 @@ let update_User = (data) => {
   return new Promise(async (resolve, reject) => {
     try {
       if (!data.id) {
-        resolve({ errCode: 2, message: "id not found" });
+        resolve({ errCode: 2, message: 'id not found' });
       }
       let user = await db.user.findOne({ where: { id: data.id }, raw: false });
       if (user) {
         let check = await checkUserName(data.username);
         if (check) {
-          resolve({ errCode: 3, message: "Username đã tồn tại" });
+          resolve({ errCode: 3, message: 'Username đã tồn tại' });
         } else {
           let hash_password = await hashUserPassword(data.password);
           user.username = data.username;
@@ -164,13 +160,13 @@ let update_User = (data) => {
           await user.save();
           resolve({
             errCode: 0,
-            message: "Update successful",
+            message: 'Update successful',
           });
         }
       } else {
         resolve({
           errCode: 1,
-          message: "Update failed",
+          message: 'Update failed',
         });
       }
     } catch (error) {
@@ -183,10 +179,10 @@ let delete_User = (id) => {
     try {
       let data = await db.user.findOne({ where: { id: id }, raw: false });
       if (!data) {
-        resolve({ errCode: 2, message: "User not found" });
+        resolve({ errCode: 2, message: 'User not found' });
       } else {
         await data.destroy();
-        resolve({ errCode: 0, message: "User is deleted" });
+        resolve({ errCode: 0, message: 'User is deleted' });
       }
     } catch (error) {
       reject(error);
