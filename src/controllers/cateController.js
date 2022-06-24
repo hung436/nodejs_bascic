@@ -1,4 +1,4 @@
-import cateService from "./../service/cateService";
+import cateService from './../service/cateService';
 
 let getCategory = async (req, res) => {
   let data = await cateService.get_Category(req.query);
@@ -10,6 +10,7 @@ let createCategory = async (req, res) => {
 };
 let editCategory = async (req, res) => {
   let data = await cateService.editCategory(req.body);
+  console.log(req.body);
   return res.status(200).json(data);
 };
 let deleteCategory = async (req, res) => {

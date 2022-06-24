@@ -1,7 +1,7 @@
-import db from "./../models/index";
-const { Op } = require("sequelize");
-const fs = require("fs");
-const path = require("path");
+import db from './../models/index';
+const { Op } = require('sequelize');
+const fs = require('fs');
+const path = require('path');
 let getProduct = (page) => {
   return new Promise(async (resolve, reject) => {
     try {
@@ -17,13 +17,13 @@ let getProduct = (page) => {
       if (product) {
         resolve({
           errorCode: 0,
-          message: "Success",
+          message: 'Success',
           data: product,
         });
       } else {
         resolve({
           errorCode: 1,
-          message: "Product not found",
+          message: 'Product not found',
           data: {},
         });
       }
@@ -41,9 +41,9 @@ let getProductById = (id) => {
         raw: false,
       });
       if (product) {
-        resolve({ errorCode: 0, message: "Success", data: product });
+        resolve({ errorCode: 0, message: 'Success', data: product });
       } else {
-        resolve({ errorCode: 1, message: "Fail" });
+        resolve({ errorCode: 1, message: 'Fail' });
       }
     } catch (error) {
       reject(error);
@@ -55,11 +55,11 @@ let createProduct = (data) => {
     try {
       let check = await db.product.findOne({ where: { name: data.body.name } });
       if (check) {
-        let imgProduct = "src/public/uploads/" + data.file.filename;
+        let imgProduct = 'src/public/uploads/' + data.file.filename;
         await fs.unlinkSync(imgProduct);
         resolve({
           errorCode: 1,
-          message: "Đã tồn tại",
+          message: 'Đã tồn tại',
         });
       } else {
         await db.product.create({
@@ -73,7 +73,7 @@ let createProduct = (data) => {
         });
         resolve({
           errorCode: 0,
-          message: "Success",
+          message: 'Success',
         });
       }
     } catch (error) {
@@ -98,7 +98,7 @@ let editProduct = (data) => {
 
         if (data.file) {
           if (product.image_link !== null) {
-            let oldProduct = "src/public/uploads/" + product.image_link;
+            let oldProduct = 'src/public/uploads/' + product.image_link;
             fs.unlinkSync(oldProduct);
           }
           // product.image_link = `https://drive.google.com/uc?export=view&id=${data.file.fileId}`;
@@ -108,10 +108,10 @@ let editProduct = (data) => {
         await product.save();
         resolve({
           errorCode: 0,
-          message: "Success",
+          message: 'Success',
         });
       } else {
-        resolve({ errorCode: 1, message: "Fail" });
+        resolve({ errorCode: 1, message: 'Fail' });
       }
     } catch (error) {
       reject(error);
@@ -124,16 +124,16 @@ let deleteProduct = (id) => {
       let product = await db.product.findOne({ where: { id: id }, raw: false });
       if (product) {
         if (product.image_link !== null) {
-          let imgProduct = "src/public/uploads/" + product.image_link;
+          let imgProduct = 'src/public/uploads/' + product.image_link;
           await fs.unlinkSync(imgProduct);
         }
         await product.destroy();
         resolve({
           errorCode: 0,
-          message: "Success",
+          message: 'Success',
         });
       } else {
-        resolve({ errorCode: 1, message: "Fail" });
+        resolve({ errorCode: 1, message: 'Fail' });
       }
     } catch (error) {
       reject(error);
@@ -143,36 +143,36 @@ let deleteProduct = (id) => {
 let getProductFill = (id, action) => {
   return new Promise(async (resolve, reject) => {
     try {
-      if (id == "ALL") {
-        if (action == "ALL") {
-          let product = await db.product.findAll({ order: [["id", "DESC"]] });
+      if (id == 'ALL') {
+        if (action == 'ALL') {
+          let product = await db.product.findAll({ order: [['id', 'DESC']] });
           resolve(product);
         }
-        if (action == "min") {
+        if (action == 'min') {
           let product = await db.product.findAll({
-            order: [["price", "ASC"]],
+            order: [['price', 'ASC']],
           });
           resolve(product);
         }
-        if (action == "max") {
+        if (action == 'max') {
           let product = await db.product.findAll({
-            order: [["price", "DESC"]],
+            order: [['price', 'DESC']],
           });
           resolve(product);
         }
-        if (action == "free") {
+        if (action == 'free') {
           let product = await db.product.findAll({
             where: {
               discount: {
                 [Op.gt]: 0,
               },
             },
-            order: [["discount", "DESC"]],
+            order: [['discount', 'DESC']],
           });
           resolve(product);
         }
       } else {
-        if (action == "ALL") {
+        if (action == 'ALL') {
           let product = await db.product.findAll({
             where: {
               cate_id: id,
@@ -180,25 +180,25 @@ let getProductFill = (id, action) => {
           });
           resolve(product);
         }
-        if (action == "min") {
+        if (action == 'min') {
           let product = await db.product.findAll({
             where: {
               cate_id: id,
             },
-            order: [["price", "ASC"]],
+            order: [['price', 'ASC']],
           });
           resolve(product);
         }
-        if (action == "max") {
+        if (action == 'max') {
           let product = await db.product.findAll({
             where: {
               cate_id: id,
             },
-            order: [["price", "DESC"]],
+            order: [['price', 'DESC']],
           });
           resolve(product);
         }
-        if (action == "free") {
+        if (action == 'free') {
           let product = await db.product.findAll({
             where: {
               cate_id: id,
@@ -206,10 +206,31 @@ let getProductFill = (id, action) => {
                 [Op.gt]: 0,
               },
             },
-            order: [["discount", "DESC"]],
+            order: [['discount', 'DESC']],
           });
           resolve(product);
         }
+      }
+    } catch (error) {
+      reject(error);
+    }
+  });
+};
+const searchProduct = (keyword) => {
+  return new Promise(async (resolve, reject) => {
+    try {
+      let product = await db.product.findAll({
+        where: { name: { [Op.like]: '%' + keyword + '%' } },
+      });
+      console.log(product);
+      if (product) {
+        resolve({
+          errorCode: 0,
+          message: 'Success',
+          data: product,
+        });
+      } else {
+        resolve({ errorCode: 1, message: 'Fail' });
       }
     } catch (error) {
       reject(error);
@@ -223,4 +244,5 @@ module.exports = {
   deleteProduct,
   getProductById,
   getProductFill,
+  searchProduct,
 };

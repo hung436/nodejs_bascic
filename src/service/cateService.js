@@ -1,18 +1,18 @@
-import db from "./../models/index";
+import db from './../models/index';
 let get_Category = () => {
   return new Promise(async (resolve, reject) => {
     try {
-      let data = await db.category.findAll({ order: [["id", "ASC"]] });
+      let data = await db.category.findAll({ order: [['id', 'ASC']] });
       if (data) {
         resolve({
           errorCode: 0,
-          message: "Success",
+          message: 'Success',
           data: data,
         });
       } else {
         resolve({
           errorCode: 1,
-          message: "Error",
+          message: 'Error',
           data: {},
         });
       }
@@ -28,7 +28,7 @@ let addCategory = (data) => {
       if (check) {
         resolve({
           errorCode: 1,
-          message: "Đã tồn tại",
+          message: 'Đã tồn tại',
         });
       } else {
         await db.category.create({
@@ -36,7 +36,7 @@ let addCategory = (data) => {
         });
         resolve({
           errorCode: 0,
-          message: "Success",
+          message: 'Success',
         });
       }
     } catch (error) {
@@ -56,10 +56,10 @@ let editCategory = (data) => {
         await cate.save();
         resolve({
           errorCode: 0,
-          message: "Success",
+          message: 'Success',
         });
       } else {
-        resolve({ errorCode: 1, message: "Fail" });
+        resolve({ errorCode: 1, message: 'Fail' });
       }
     } catch (error) {
       reject(error);
@@ -69,18 +69,19 @@ let editCategory = (data) => {
 let deleteCategory = (data) => {
   return new Promise(async (resolve, reject) => {
     try {
+      console.log(data.id);
       let check = await db.category.findOne({
-        where: { name: data.name },
+        where: { id: data.id },
         raw: false,
       });
       if (check) {
         await check.destroy();
         resolve({
           errorCode: 0,
-          message: "Success",
+          message: 'Success',
         });
       } else {
-        resolve({ errorCode: 1, message: "Cate not found" });
+        resolve({ errorCode: 1, message: 'Cate not found' });
       }
     } catch (error) {
       reject(error);

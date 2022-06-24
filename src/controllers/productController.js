@@ -1,4 +1,4 @@
-import productService from "../service/productService";
+import productService from '../service/productService';
 let getProduct = async (req, res) => {
   let page = req.query.page;
   let data = await productService.getProduct(page);
@@ -14,7 +14,7 @@ let createProduct = async (req, res) => {
   return res.status(200).json(data);
 };
 let editProduct = async (req, res) => {
-  console.log("file", req.file);
+  console.log('file', req.file);
   let data = await productService.editProduct(req);
   return res.status(200).json(data);
 };
@@ -29,6 +29,14 @@ let getProductFill = async (req, res) => {
   );
   return res.status(200).json(data);
 };
+const searchProduct = async (req, res) => {
+  let keyword = req.query.keyword;
+  if (!keyword) {
+    return res.status(404).json('Khong tim thi keyword');
+  }
+  let data = await productService.searchProduct(keyword);
+  return res.status(200).json(data);
+};
 module.exports = {
   getProduct,
   createProduct,
@@ -36,4 +44,5 @@ module.exports = {
   deleteProduct,
   getProductById,
   getProductFill,
+  searchProduct,
 };
