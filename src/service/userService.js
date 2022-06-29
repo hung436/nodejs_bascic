@@ -1,6 +1,6 @@
-import db from "./../models/index";
-import bcrypt from "bcrypt";
-const jwtHelper = require("../helpers/jwt.helper");
+import db from './../models/index';
+import bcrypt from 'bcrypt';
+const jwtHelper = require('../helpers/jwt.helper');
 const saltRounds = 10;
 const salt = bcrypt.genSaltSync(saltRounds);
 let hashUserPassword = (password) => {
@@ -30,13 +30,13 @@ let checkUserName = (username) => {
 };
 let tokenList = {};
 // Thời gian sống của token
-const accessTokenLife = process.env.ACCESS_TOKEN_LIFE || "10m";
+const accessTokenLife = process.env.ACCESS_TOKEN_LIFE || '10m';
 const accessTokenSecret =
-  process.env.ACCESS_TOKEN_SECRET || "access-token-secret-example";
+  process.env.ACCESS_TOKEN_SECRET || 'access-token-secret-example';
 // Thời gian sống của refreshToken
-const refreshTokenLife = process.env.REFRESH_TOKEN_LIFE || "3650d";
+const refreshTokenLife = process.env.REFRESH_TOKEN_LIFE || '3650d';
 // Mã secretKey này phải được bảo mật tuyệt đối, các bạn có thể lưu vào biến môi trường hoặc file
-const refreshTokenSecret = process.env.REFRESH_TOKEN_SECRET || "hungdt";
+const refreshTokenSecret = process.env.REFRESH_TOKEN_SECRET || 'hungdt';
 
 let login = (username, password) => {
   return new Promise(async (resolve, reject) => {
@@ -70,17 +70,17 @@ let login = (username, password) => {
             userData.refreshToken = refreshToken;
             userData.accessToken = accessToken;
             userData.error = 0;
-            userData.message = "Đăng nhập thành công";
+            userData.message = 'Đăng nhập thành công';
             delete user.password;
             userData.username = user.username;
             userData.userID = user.id;
           } else {
             userData.error = 3;
-            userData.message = "Wrong password";
+            userData.message = 'Wrong password';
           }
         } else {
           userData.error = 2;
-          userData.message = "User not found";
+          userData.message = 'User not found';
         }
       } else {
         userData.error = 1;
@@ -99,7 +99,7 @@ let getAddress = (id) => {
       let address = await db.user.findOne({
         where: { id: id },
         attributes: {
-          exclude: ["password", "createdAt", "updatedAt"],
+          exclude: ['password', 'createdAt', 'updatedAt'],
         },
         include: [{ model: db.address }],
         raw: true,
@@ -128,11 +128,11 @@ let order = (data) => {
             status: data.body.status,
             address:
               address.city +
-              " " +
+              ' ' +
               address.district +
-              " " +
+              ' ' +
               address.ward +
-              " " +
+              ' ' +
               address.street_name,
           })
           .then((order) => {
@@ -149,9 +149,9 @@ let order = (data) => {
             }),
               db.orderdetail.bulkCreate(array);
           });
-        resolve({ errorCode: 0, message: "Success", id: idorder });
+        resolve({ errorCode: 0, message: 'Success', id: idorder });
       } else {
-        resolve({ errorCode: 1, message: "not found" });
+        resolve({ errorCode: 1, message: 'not found' });
       }
     } catch (error) {
       reject(error);
@@ -185,20 +185,20 @@ let refresh = async (req) => {
         // gửi token mới về cho người dùng
         resolve({
           errorCode: 0,
-          message: "Success",
+          message: 'Success',
           data: accessToken,
         });
       } catch (error) {
         reject(error);
         resolve({
           errorCode: 1,
-          message: "Invalid refresh token.",
+          message: 'Invalid refresh token.',
         });
       }
     } else {
       resolve({
         errorCode: 1,
-        message: "No token provided.",
+        message: 'No token provided.',
       });
     }
   });
@@ -219,13 +219,13 @@ let getOrder = (id, page) => {
       if (data) {
         resolve({
           errorCode: 0,
-          message: "Success",
+          message: 'Success',
           data: data,
         });
       } else {
         resolve({
           errorCode: 1,
-          message: "not found",
+          message: 'not found',
         });
       }
     } catch (error) {
@@ -238,7 +238,7 @@ let getOrderDetail = (id) => {
     try {
       if (id) {
         let data = await db.orderdetail.findAll({
-          order: [["id", "ASC"]],
+          order: [['id', 'ASC']],
           where: { orderID: id },
           include: [{ model: db.product }],
           raw: true,
@@ -246,13 +246,13 @@ let getOrderDetail = (id) => {
         });
         resolve({
           errorCode: 0,
-          message: "Success",
+          message: 'Success',
           data: data,
         });
       } else {
         resolve({
           errorCode: 1,
-          message: "not found",
+          message: 'not found',
         });
       }
     } catch (error) {
@@ -269,7 +269,7 @@ let addFavorite = (id, productId) => {
       });
       resolve({
         errorCode: 0,
-        message: "Success",
+        message: 'Success',
       });
     } catch (error) {
       reject(error);
@@ -285,10 +285,10 @@ let getFavoriteProduct = (id, productId) => {
       if (check) {
         resolve({
           errorCode: 0,
-          message: "Yes",
+          message: 'Yes',
         });
       } else {
-        resolve({ errorCode: 1, message: "Fail" });
+        resolve({ errorCode: 1, message: 'Fail' });
       }
     } catch (error) {
       reject(error);
@@ -306,10 +306,10 @@ let deteleFavoriteProduct = (id, productId) => {
         await product.destroy();
         resolve({
           errorCode: 0,
-          message: "Success",
+          message: 'Success',
         });
       } else {
-        resolve({ errorCode: 1, message: "not found" });
+        resolve({ errorCode: 1, message: 'not found' });
       }
     } catch (error) {
       reject(error);
@@ -323,7 +323,14 @@ let changeAddress = (id, address) => {
         where: { userID: id },
         raw: false,
       });
+      let user = await db.user.findOne({ where: { id: id }, raw: false });
+
       if (userAddress) {
+        user.email = address.email;
+        user.numberphone;
+        user.firstname = address.firstname;
+        user.lastname = address.lastname;
+        user.save();
         userAddress.city = address.city;
         userAddress.district = address.district;
         userAddress.ward = address.ward;
@@ -331,8 +338,31 @@ let changeAddress = (id, address) => {
         userAddress.save();
         resolve({
           errorCode: 0,
-          message: "Success",
+          message: 'Success',
         });
+      }
+    } catch (error) {
+      reject(error);
+    }
+  });
+};
+const getAllFavorite = (user) => {
+  return new Promise(async (resolve, reject) => {
+    try {
+      let products = await db.favorite.findAll({
+        where: { userId: user },
+        include: [{ model: db.product }],
+        raw: true,
+        nest: true,
+      });
+      if (products) {
+        resolve({
+          errorCode: 0,
+          message: 'Success',
+          data: products,
+        });
+      } else {
+        resolve({ errorCode: 1, message: 'not found' });
       }
     } catch (error) {
       reject(error);
@@ -350,4 +380,5 @@ module.exports = {
   getFavoriteProduct,
   deteleFavoriteProduct,
   changeAddress,
+  getAllFavorite,
 };

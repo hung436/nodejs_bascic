@@ -1,4 +1,4 @@
-import userService from "../service/userService";
+import userService from '../service/userService';
 let register = async (req, res) => {
   let data = await userService.register(req);
   return res.status(200).json(data);
@@ -42,6 +42,11 @@ let getFavoriteProduct = async (req, res) => {
   let data = await userService.getFavoriteProduct(req.jwtDecoded, req.query.id);
   return res.status(200).json(data);
 };
+let getAllFavorite = async (req, res) => {
+  let data = await userService.getAllFavorite(req.jwtDecoded);
+
+  return res.status(200).json(data);
+};
 let deteleFavoriteProduct = async (req, res) => {
   let data = await userService.deteleFavoriteProduct(
     req.jwtDecoded,
@@ -65,4 +70,5 @@ module.exports = {
   getFavoriteProduct,
   deteleFavoriteProduct,
   changeAddress,
+  getAllFavorite,
 };

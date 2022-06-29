@@ -71,6 +71,7 @@ const initWebRoute = (app) => {
     isAuth,
     userController.getFavoriteProduct
   );
+  router.get('/api/getallfavorite', isAuth, userController.getAllFavorite);
   router.delete(
     '/api/detelefavoriteproduct',
     isAuth,
