@@ -2,7 +2,10 @@
   "name": "nodejs_bascic",
   "version": "1.0.0",
   "description": "hunghuynh",
-  "main": "index.js",
+  "main": "server.js",
+  "engines": {
+    "node": "14.x"
+  },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "nodemon --exec ./node_modules/.bin/babel-node ./src/server.js"
